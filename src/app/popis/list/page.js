@@ -3,7 +3,6 @@ import useListData from "@/hooks/useListData";
 import DataTable from "react-data-table-component";
 import {useEffect, useState} from "react";
 import {Button, Card, CardBody, CardHeader, Row, Spinner} from "reactstrap";
-import {useTestActions} from "@/contexts/testContext";
 import {CiEdit, CiTrash} from "react-icons/ci";
 import {useListActions} from "@/contexts/listActionContext";
 import listAction from "@/core/listAction";
@@ -13,8 +12,8 @@ import AddPopisDialogs from "@/elements/Popis/AddPopisDialogs";
 
 export const tableColumns = [
     {
-        name: 'Datum',
-        selector: (row) => `${row.datum}`,
+        name: 'Naziv',
+        selector: (row) => `${row.naziv}`,
         sortable: false
     },
     {
@@ -24,7 +23,7 @@ export const tableColumns = [
     },
     {
         name: 'Active',
-        selector: (row) => `${row.active}`,
+        selector: (row) => `${row.active ? "Da" : "Ne"}`,
         sortable: false
     },
     {

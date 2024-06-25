@@ -2,7 +2,7 @@ import {Button, Col, Label, Modal, ModalBody, ModalFooter, ModalHeader, Row} fro
 import {useListActions} from "@/contexts/listActionContext";
 import listAction from "@/core/listAction";
 import {useForm} from "react-hook-form";
-import {post, put} from "@/core/httpClient";
+import {AxiosAuth, post, put} from "@/core/httpClient";
 import {useEffect} from "react";
 import {toast, ToastContainer} from "react-toastify";
 
@@ -38,8 +38,8 @@ const UpdatePopisDialog = ({isOpen}) => {
             <ModalBody>
                 <Row className="mb-3">
                     <Col md={6} className="mb-1">
-                        <input type="text" className="form-control" placeholder="Datum" {...register("datum", {
-                            required: "Datum je neophodan!",
+                        <input type="text" className="form-control" placeholder="Naziv" {...register("naziv", {
+                            required: "Naziv je neophodan!",
                             maxLength: 50,
                             minLength: 3,
                         })} />
@@ -59,9 +59,7 @@ const UpdatePopisDialog = ({isOpen}) => {
                 </Row>
                 <Row className="mb-3">
                     <Col md={6} className="mb-1">
-                        <input type="checkbox" className="" placeholder="Aktivan" {...register("active", {
-                            required: "Aktivan is required!"
-                        })} />
+                        <input type="checkbox" className="" placeholder="Aktivan" {...register("active", {})} />
                         {errors && errors.email && (
                             <span className="text-danger">{errors.active.message}</span>
                         )}
@@ -72,7 +70,7 @@ const UpdatePopisDialog = ({isOpen}) => {
             <ModalFooter>
                 <Button className="btn btn-success" type="button" onClick={() => {
                     handleSubmit(async (data) => {
-                        let result = await put("/popis/update", data);
+                        let result = await AxiosAuth.put("/popis/update", data);
 
                         if (result && result.status === 200) {
                             toast.success("Successfully updated!");

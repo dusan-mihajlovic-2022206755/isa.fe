@@ -16,7 +16,7 @@ const DeletePopisDialog = ({isOpen}) => {
             <ModalHeader toggle={toggle}>Are you sure?</ModalHeader>
             <ModalBody>
                 <p>Id: {state.row.id}</p>
-                <p>Datum: {state.row.datum}</p>
+                <p>Datum: {state.row.naziv}</p>
                 <p>Napomena: {state.row.napomena}</p>
                 <p>Aktivan: {state.row.active}</p>
             </ModalBody>
@@ -25,7 +25,7 @@ const DeletePopisDialog = ({isOpen}) => {
                     let result = await del(`/popis/delete?popisID=${state.row.id}`);
 
                     if (result && result.status === 200) {
-                        toast.success("Successfully created!");
+                        toast.success("Uspešno izbrisan popis!");
                         dispatch({
                             type: listAction.RELOAD
                         });

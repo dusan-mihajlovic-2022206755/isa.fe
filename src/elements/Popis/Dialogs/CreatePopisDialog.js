@@ -2,7 +2,7 @@ import {Button, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row} from "reac
 import {useListActions} from "@/contexts/listActionContext";
 import listAction from "@/core/listAction";
 import {useForm} from "react-hook-form";
-import {post} from "@/core/httpClient";
+import {AxiosAuth, post} from "@/core/httpClient";
 import {toast} from "react-toastify";
 
 const CreatePopisDialog = ({isOpen}) => {
@@ -28,8 +28,8 @@ const CreatePopisDialog = ({isOpen}) => {
             <ModalBody>
                 <Row className="mb-3">
                     <Col md={6} className="mb-1">
-                        <input type="text" className="form-control" placeholder="Datum" {...register("datum", {
-                            required: "Datum je neophodan!",
+                        <input type="text" className="form-control" placeholder="Naziv" {...register("naziv", {
+                            required: "Naziv je neophodan!",
                             maxLength: 50,
                             minLength: 3,
                         })} />
@@ -62,7 +62,7 @@ const CreatePopisDialog = ({isOpen}) => {
             <ModalFooter>
                 <Button className="btn btn-success" type="button" onClick={() => {
                     handleSubmit(async (data) => {
-                        let result = await post("/popis/create", data);
+                        let result = await AxiosAuth.post("/popis/create", data);
 debugger;
                         if (result && result.status === 200) {
                             toast.success("Successfully created!");
