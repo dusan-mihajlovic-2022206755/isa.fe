@@ -25,7 +25,7 @@ const UpdatePopisDialog = ({isOpen}) => {
     });
 
     useEffect(() => {
-        setValue("datum", state.row.datum);
+        setValue("naziv", state.row.naziv);
         setValue("napomena", state.row.napomena);
         setValue("active", state.row.active);
         setValue("id", state.row.id);
@@ -70,7 +70,7 @@ const UpdatePopisDialog = ({isOpen}) => {
             <ModalFooter>
                 <Button className="btn btn-success" type="button" onClick={() => {
                     handleSubmit(async (data) => {
-                        let result = await AxiosAuth.put("/popis/update", data);
+                        let result = await AxiosAuth.post("/popis/update", data);
 
                         if (result && result.status === 200) {
                             toast.success("Successfully updated!");

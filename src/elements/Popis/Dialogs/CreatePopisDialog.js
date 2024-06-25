@@ -63,7 +63,6 @@ const CreatePopisDialog = ({isOpen}) => {
                 <Button className="btn btn-success" type="button" onClick={() => {
                     handleSubmit(async (data) => {
                         let result = await AxiosAuth.post("/popis/create", data);
-debugger;
                         if (result && result.status === 200) {
                             toast.success("Successfully created!");
                             dispatch({

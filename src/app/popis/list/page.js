@@ -56,11 +56,9 @@ export const tableColumns = [
         sortable: false
     }
 ]
-
 export default function PopisList() {
     const {data: session} = useSession();
     const userID = session?.decoded?.id;
-    console.log(userID);
     const [pageNumber, setPageNumber] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const {state, dispatch} = useListActions();
@@ -68,17 +66,17 @@ export default function PopisList() {
         getData,
         loading,
         data
-    } = useListData(`popis/get-page-list?userID=${userID}&pageNumber=${pageNumber - 1}&pageSize=${pageSize}`);
+    } = useListData(`popis/get-page-list?pageNumber=${pageNumber - 1}&pageSize=${pageSize}`);
 
     useEffect(() => {
         if (userID){
-            getData(`popis/get-page-list?userID=${userID}&pageNumber=${pageNumber - 1}&pageSize=${pageSize}`);
+            getData(`popis/get-page-list?pageNumber=${pageNumber - 1}&pageSize=${pageSize}`);
         }
     }, [pageSize, pageNumber]);
 
     useEffect(() => {
         if (state.reload && userID) {
-            getData(`popis/get-page-list?userID=${userID}&pageNumber=${pageNumber - 1}&pageSize=${pageSize}`);
+            getData(`popis/get-page-list?pageNumber=${pageNumber - 1}&pageSize=${pageSize}`);
         }
     }, [state, userID]);
 
@@ -90,7 +88,6 @@ export default function PopisList() {
         setPageNumber(page);
         setPageSize(newPerPage);
     };
-
     return (
         <>
             <Card>
@@ -104,7 +101,7 @@ export default function PopisList() {
                     </Button>
                 </CardHeader>
                 <CardBody>
-                    {data != null && <DataTable data={data.popis}
+                    {data != null && <DataTable data={data.listPopis}
                                                 columns={tableColumns}
                                                 striped={true}
                                                 noHeader={true}
@@ -124,3 +121,69 @@ export default function PopisList() {
         </>
     );
 }
+// export default function PopisList() {
+//     const {data: session} = useSession();
+//     const userID = session?.decoded?.id;
+//     const [pageNumber, setPageNumber] = useState(1);
+//     const [pageSize, setPageSize] = useState(10);
+//     const {state, dispatch} = useListActions();
+//     const {
+//         getData,
+//         loading,
+//         data
+//     } = useListData(`popis/get-page-list?userID=${userID}&pageNumber=${pageNumber - 1}&pageSize=${pageSize}`);
+//
+//     useEffect(() => {
+//         if (userID){
+//             getData(`popis/get-page-list?userID=${userID}&pageNumber=${pageNumber - 1}&pageSize=${pageSize}`);
+//         }
+//     }, [pageSize, pageNumber]);
+//
+//     useEffect(() => {
+//         if (state.reload && userID) {
+//             getData(`popis/get-page-list?userID=${userID}&pageNumber=${pageNumber - 1}&pageSize=${pageSize}`);
+//         }
+//     }, [state, userID]);
+//
+//     const handlePageChange = async (page) => {
+//         setPageNumber(page);
+//     };
+//
+//     const handlePerRowsChange = async (newPerPage, page) => {
+//         setPageNumber(page);
+//         setPageSize(newPerPage);
+//     };
+//
+//     return (
+//         <>
+//             <Card>
+//                 <CardHeader className="d-flex justify-content-end">
+//                     <Button className="btn btn-success me-3" variant="outline-light" onClick={() => {
+//                         dispatch({
+//                             type: listAction.CREATE
+//                         })
+//                     }}>
+//                         Kreiraj Popis <IoAddCircleOutline/>
+//                     </Button>
+//                 </CardHeader>
+//                 <CardBody>
+//                     {data != null && <DataTable data={data.popis}
+//                                                 columns={tableColumns}
+//                                                 striped={true}
+//                                                 noHeader={true}
+//                                                 pagination
+//                                                 paginationServer
+//                                                 progressPending={loading}
+//                                                 paginationTotalRows={data.totalElements}
+//                                                 onChangePage={handlePageChange}
+//                                                 onChangeRowsPerPage={handlePerRowsChange}
+//                                                 progressComponent={<Spinner color="danger">Ocitavanje...</Spinner>}
+//                                                 highlightOnHover
+//                     />}
+//                 </CardBody>
+//             </Card>
+//
+//             <AddPopisDialogs/>
+//         </>
+//     );
+// }

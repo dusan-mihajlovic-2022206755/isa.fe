@@ -1,7 +1,7 @@
 import {Button, Modal, ModalBody, ModalFooter, ModalHeader} from "reactstrap";
 import {useListActions} from "@/contexts/listActionContext";
 import listAction from "@/core/listAction";
-import {del} from "@/core/httpClient";
+import {AxiosAuth, del} from "@/core/httpClient";
 import {toast} from "react-toastify";
 
 const DeletePopisDialog = ({isOpen}) => {
@@ -22,7 +22,7 @@ const DeletePopisDialog = ({isOpen}) => {
             </ModalBody>
             <ModalFooter>
                 <Button className="btn btn-success" type="button" onClick={async () => {
-                    let result = await del(`/popis/delete?popisID=${state.row.id}`);
+                    let result = await AxiosAuth.post(`/popis/delete?popisID=${state.row.id}`);
 
                     if (result && result.status === 200) {
                         toast.success("Uspešno izbrisan popis!");
