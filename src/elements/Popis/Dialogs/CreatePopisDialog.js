@@ -4,6 +4,7 @@ import listAction from "@/core/listAction";
 import {useForm} from "react-hook-form";
 import {AxiosAuth, post} from "@/core/httpClient";
 import {toast} from "react-toastify";
+import {useSession} from "next-auth/react";
 
 const CreatePopisDialog = ({isOpen}) => {
     const {dispatch} = useListActions();
@@ -21,15 +22,7 @@ const CreatePopisDialog = ({isOpen}) => {
     } = useForm({
         mode: "onSubmit"
     });
-
-    // const options = [
-    //     { value: 'admin', label: 'Administrator' },
-    //     { value: 'employee', label: 'Employee' },
-    // ];
-    //
-    // const handleSelect = (option) => {
-    //     console.log('Selected option:', option);
-    // };
+    const {data: session} = useSession();
 
     return (
         <Modal isOpen={isOpen} toggle={toggle}>
@@ -60,27 +53,7 @@ const CreatePopisDialog = ({isOpen}) => {
                     <Col md={12} className="mb-1">
                         <label>Aktivan</label>
                         <input type="checkbox" className="" placeholder="Aktivan" {...register("active", {
-                            required: "Aktivan is required!"
                         })} />
-                        {errors && errors.email && (
-                            <span className="text-danger">{errors.active.message}</span>
-                        )}
-                    </Col>
-
-                </Row>
-                <Row className="mb-3">
-                    {/*<h3>Rola</h3>*/}
-                    {/*<Dropdown options={options} onSelect={handleSelect}/>*/}
-                    <Col md={3} className="mb-1">
-                        <label>Rola</label>
-                        <input type="number" className="form-control" placeholder="Rola" {...register("rola", {
-                            maxLength: 1,
-                            minLength: 1,
-                            required: true,
-                        })}/>
-                        {errors && errors.rola && (
-                            <span className="text-danger">{errors.rola.message}</span>
-                        )}
                     </Col>
                 </Row>
 
@@ -88,6 +61,7 @@ const CreatePopisDialog = ({isOpen}) => {
             <ModalFooter>
                 <Button className="btn btn-success" type="button" onClick={() => {
                     handleSubmit(async (data) => {
+                        data.userID = session?.decoded?.id;
                         let result = await AxiosAuth.post("/popis/create", data);
                         if (result && result.status === 200) {
                             toast.success("Successfully created!");

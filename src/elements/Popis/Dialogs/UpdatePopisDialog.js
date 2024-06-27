@@ -5,6 +5,7 @@ import {useForm} from "react-hook-form";
 import {AxiosAuth, post, put} from "@/core/httpClient";
 import {useEffect} from "react";
 import {toast, ToastContainer} from "react-toastify";
+import {useSession} from "next-auth/react";
 
 const UpdatePopisDialog = ({isOpen}) => {
     const {state, dispatch} = useListActions();
@@ -30,7 +31,7 @@ const UpdatePopisDialog = ({isOpen}) => {
         setValue("active", state.row.active);
         setValue("id", state.row.id);
     }, [state]);
-
+    const {data: session} = useSession();
     return (
         <Modal isOpen={isOpen} toggle={toggle}>
             <ModalHeader toggle={toggle}>Izmena popisa {state.row.naziv}</ModalHeader>
@@ -57,18 +58,17 @@ const UpdatePopisDialog = ({isOpen}) => {
                     </Col>
                 </Row>
                 <Row className="mb-3">
-                    <Col md={6} className="mb-1">
-                        <input type="checkbox" className="" placeholder="Aktivan" {...register("active", {})} />
-                        {errors && errors.email && (
-                            <span className="text-danger">{errors.active.message}</span>
-                        )}
+                    <Col md={12} className="mb-1">
+                        <label>Aktivan</label>
+                        <input type="checkbox" className="" placeholder="Aktivan" {...register("active", {
+                        })} />
                     </Col>
-
                 </Row>
             </ModalBody>
             <ModalFooter>
                 <Button className="btn btn-success" type="button" onClick={() => {
                     handleSubmit(async (data) => {
+                        data.userID = session?.decoded?.id;
                         let result = await AxiosAuth.post("/popis/update", data);
 
                         if (result && result.status === 200) {

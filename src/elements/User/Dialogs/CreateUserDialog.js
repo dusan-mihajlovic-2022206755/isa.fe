@@ -4,6 +4,7 @@ import listAction from "@/core/listAction";
 import {useForm} from "react-hook-form";
 import {AxiosAuth, post} from "@/core/httpClient";
 import {toast} from "react-toastify";
+import {useSession} from "next-auth/react";
 
 const CreateUserDialog = ({isOpen}) => {
     const {dispatch} = useListActions();
@@ -21,10 +22,17 @@ const CreateUserDialog = ({isOpen}) => {
     } = useForm({
         mode: "onSubmit"
     });
-
+    // const options = [
+    //     { value: 'admin', label: 'Administrator' },
+    //     { value: 'employee', label: 'Employee' },
+    // ];
+    //
+    // const handleSelect = (option) => {
+    //     console.log('Selected option:', option);
+    // };
     return (
         <Modal isOpen={isOpen} toggle={toggle}>
-            <ModalHeader toggle={toggle}>Modal title</ModalHeader>
+            <ModalHeader toggle={toggle}>Create user</ModalHeader>
             <ModalBody>
                 <Row className="mb-3">
                     <Col md={6} className="mb-1">
@@ -85,12 +93,26 @@ const CreateUserDialog = ({isOpen}) => {
                     </Col>
                     <Col md={6}></Col>
                 </Row>
+                <Row className="mb-3">
+                    {/*<h3>Rola</h3>*/}
+                    {/*<Dropdown options={options} onSelect={handleSelect}/>*/}
+                    <Col md={3} className="mb-1">
+                        <label>Rola</label>
+                        <input type="number" className="form-control" placeholder="Rola" {...register("roleID", {
+                            maxLength: 1,
+                            minLength: 1,
+                            required: true,
+                        })}/>
+                        {errors && errors.rola && (
+                            <span className="text-danger">{errors.rola.message}</span>
+                        )}
+                    </Col>
+                </Row>
             </ModalBody>
             <ModalFooter>
                 <Button className="btn btn-success" type="button" onClick={() => {
                     handleSubmit(async (data) => {
                         let result = await AxiosAuth.post("/users/create", data);
-
                         if (result && result.status === 200) {
                             toast.success("User created successfully!");
                             dispatch({

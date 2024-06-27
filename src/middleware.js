@@ -9,8 +9,8 @@ export default withAuth(
         var decoded = jwtDecode(req.nextauth.token.token);
         let isEmployee = decoded?.roles.some(role => role.authority === roles.EMPLOYEE);
         let isAdministrator = decoded?.roles.some(role => role.authority === roles.ADMINISTRATOR);
-        console.log(req.nextauth);
-        console.log(decoded);
+        //console.log(req.nextauth);
+        //console.log(decoded);
         if (req.nextUrl.pathname.startsWith("/user") && !isAdministrator)
             return NextResponse.rewrite(
                 new URL("/api/auth/signin?message=You Are Not Authorized!", req.url)

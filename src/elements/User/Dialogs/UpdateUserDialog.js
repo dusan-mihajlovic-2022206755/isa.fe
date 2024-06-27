@@ -5,6 +5,7 @@ import {useForm} from "react-hook-form";
 import {AxiosAuth, post, put} from "@/core/httpClient";
 import {useEffect} from "react";
 import {toast, ToastContainer} from "react-toastify";
+import {useSession} from "next-auth/react";
 
 const UpdateUserDialog = ({isOpen}) => {
     const {state, dispatch} = useListActions();
@@ -30,8 +31,8 @@ const UpdateUserDialog = ({isOpen}) => {
         setValue("email", state.row.email);
         setValue("id", state.row.id);
         setValue("contactNumber", state.row.contactNumber);
+        setValue("roleID", state.row.roleID);
     }, [state]);
-
     return (
         <Modal isOpen={isOpen} toggle={toggle}>
             <ModalHeader toggle={toggle}>Modal title</ModalHeader>
@@ -94,6 +95,22 @@ const UpdateUserDialog = ({isOpen}) => {
                     </Col>
                     <Col md={6}></Col>
                 </Row>
+                <Row className="mb-3">
+                {/*<h3>Rola</h3>*/}
+                {/*<Dropdown options={options} onSelect={handleSelect}/>*/}
+                <Col md={3} className="mb-1">
+                    <label>Rola</label>
+                    <input type="number" className="form-control" placeholder="Rola" {...register("roleID", {
+                        maxLength: 1,
+                        minLength: 1,
+                        required: true,
+                    })}/>
+                    {errors && errors.rola && (
+                        <span className="text-danger">{errors.rola.message}</span>
+                    )}
+                </Col>
+                </Row>
+
             </ModalBody>
             <ModalFooter>
                 <Button className="btn btn-success" type="button" onClick={() => {

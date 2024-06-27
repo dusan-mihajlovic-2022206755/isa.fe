@@ -10,15 +10,15 @@ const DeletePopisDialog = ({isOpen}) => {
     const toggle = () => dispatch({
         type: listAction.RESET
     });
-
+    console.log(state.row.active);
     return (
         <Modal isOpen={isOpen} toggle={toggle}>
             <ModalHeader toggle={toggle}>Da li ste sigurni?</ModalHeader>
             <ModalBody>
                 <p>Id: {state.row.id}</p>
-                <p>Datum: {state.row.naziv}</p>
+                <p>Naziv: {state.row.naziv}</p>
                 <p>Napomena: {state.row.napomena}</p>
-                <p>Aktivan: {state.row.active}</p>
+                <p>Aktivan: {state.row.active ? "Da" : "Ne"}</p>
             </ModalBody>
             <ModalFooter>
                 <Button className="btn btn-success" type="button" onClick={async () => {
