@@ -96,19 +96,20 @@ const UpdateUserDialog = ({isOpen}) => {
                     <Col md={6}></Col>
                 </Row>
                 <Row className="mb-3">
-                {/*<h3>Rola</h3>*/}
-                {/*<Dropdown options={options} onSelect={handleSelect}/>*/}
-                <Col md={3} className="mb-1">
-                    <label>Rola</label>
-                    <input type="number" className="form-control" placeholder="Rola" {...register("roleID", {
-                        maxLength: 1,
-                        minLength: 1,
-                        required: true,
-                    })}/>
-                    {errors && errors.rola && (
-                        <span className="text-danger">{errors.rola.message}</span>
-                    )}
-                </Col>
+                    {/*<h3>Rola</h3>*/}
+                    {/*<Dropdown options={options} onSelect={handleSelect}/>*/}
+                    <Col md={6} className="mb-1">
+                        <label>Rola</label>
+                        <label>1-Administrator, 2-Employee</label>
+                        <input min="1" max="2" type="number" className="form-control" placeholder="Rola" {...register("roleID", {
+                            maxLength: 1,
+                            minLength: 1,
+                            required: true,
+                        })}/>
+                        {errors && errors.rola && (
+                            <span className="text-danger">{errors.rola.message}</span>
+                        )}
+                    </Col>
                 </Row>
 
             </ModalBody>

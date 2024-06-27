@@ -9,21 +9,28 @@ import listAction from "@/core/listAction";
 import {IoAddCircleOutline} from "react-icons/io5";
 import {signIn, useSession} from "next-auth/react";
 import AddPopisDialogs from "@/elements/Popis/AddPopisDialogs";
+import {useRouter} from "next/router";
+import AddPopisStavkaDialogs from "@/elements/PopisStavka/AddPopisStavkaDialogs";
 
 export const tableColumns = [
     {
-        name: 'Naziv',
-        selector: (row) => `${row.naziv}`,
+        name: 'Naziv artikla',
+        selector: (row) => `${row.nazivArtikla}`,
         sortable: false
     },
     {
-        name: 'Napomena',
-        selector: (row) => `${row.napomena}`,
+        name: 'barkod',
+        selector: (row) => `${row.barkod}`,
         sortable: false
     },
     {
-        name: 'Active',
-        selector: (row) => `${row.active ? "Da" : "Ne"}`,
+        name: 'Kolicina',
+        selector: (row) => `${row.kolicina}`,
+        sortable: false
+    },
+    {
+        name: 'Vreme popisivanja',
+        selector: (row) => `${row.vremePopisivanja}`,
         sortable: false
     },
     {
@@ -34,15 +41,7 @@ export const tableColumns = [
 
             return (
                 <>
-                    <Button className="btn btn-primary me-3" variant="outline-light" onClick={() => {
-                        window.location.href = `/popisStavka/list?id=${row.id}`;
-                        // dispatch({
-                        //     type: listAction.OPENSTAVKE,
-                        //     payload: row
-                        // });
-                    }}>
-                        <CiCalculator1/>
-                    </Button>
+
                     <Button className="btn btn-primary me-3" variant="outline-light" onClick={() => {
                         dispatch({
                             type: listAction.UPDATE,
@@ -65,20 +64,20 @@ export const tableColumns = [
         sortable: false
     }
 ]
-export default function PopisList() {
+export default function PopisStavkaList() {
     const {data: session} = useSession();
     const userID = session?.decoded?.id;
     const [pageNumber, setPageNumber] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const {state, dispatch} = useListActions();
-
-    const url = `popis/get-page-list?userID=${userID}&pageNumber=${pageNumber - 1}&pageSize=${pageSize}`;
+    const urlParams = new URLSearchParams(window.location.search);
+    const idParam = urlParams.get('id');
+    const url = `popis-stavka/get-page-list?popisID=${idParam}&pageNumber=${pageNumber - 1}&pageSize=${pageSize}`;
     const {
         getData,
         loading,
         data
     } = useListData(url);
-
     useEffect(() => {
         if (userID){
             getData(url);
@@ -108,11 +107,11 @@ export default function PopisList() {
                             type: listAction.CREATE
                         })
                     }}>
-                        Kreiraj Popis <IoAddCircleOutline/>
+                        Kreiraj stavku popisa <IoAddCircleOutline/>
                     </Button>
                 </CardHeader>
                 <CardBody>
-                    {data != null && <DataTable data={data.listPopis}
+                    {data != null && <DataTable data={data.listPopisStavka}
                                                 columns={tableColumns}
                                                 striped={true}
                                                 noHeader={true}
@@ -128,7 +127,7 @@ export default function PopisList() {
                 </CardBody>
             </Card>
 
-            <AddPopisDialogs/>
+            <AddPopisStavkaDialogs/>
         </>
     );
 }
