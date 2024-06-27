@@ -13,7 +13,7 @@ const DeletePopisDialog = ({isOpen}) => {
 
     return (
         <Modal isOpen={isOpen} toggle={toggle}>
-            <ModalHeader toggle={toggle}>Are you sure?</ModalHeader>
+            <ModalHeader toggle={toggle}>Da li ste sigurni?</ModalHeader>
             <ModalBody>
                 <p>Id: {state.row.id}</p>
                 <p>Datum: {state.row.naziv}</p>

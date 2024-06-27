@@ -1,4 +1,4 @@
-import {Button, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row} from "reactstrap";
+import {Button, Col, Dropdown, Modal, ModalBody, ModalFooter, ModalHeader, Row} from "reactstrap";
 import {useListActions} from "@/contexts/listActionContext";
 import listAction from "@/core/listAction";
 import {useForm} from "react-hook-form";
@@ -22,9 +22,18 @@ const CreatePopisDialog = ({isOpen}) => {
         mode: "onSubmit"
     });
 
+    // const options = [
+    //     { value: 'admin', label: 'Administrator' },
+    //     { value: 'employee', label: 'Employee' },
+    // ];
+    //
+    // const handleSelect = (option) => {
+    //     console.log('Selected option:', option);
+    // };
+
     return (
         <Modal isOpen={isOpen} toggle={toggle}>
-            <ModalHeader toggle={toggle}>Modal title</ModalHeader>
+            <ModalHeader toggle={toggle}>Kreiranje popisa</ModalHeader>
             <ModalBody>
                 <Row className="mb-3">
                     <Col md={6} className="mb-1">
@@ -33,8 +42,8 @@ const CreatePopisDialog = ({isOpen}) => {
                             maxLength: 50,
                             minLength: 3,
                         })} />
-                        {errors && errors.datum && (
-                            <span className="text-danger">{errors.datum.message}</span>
+                        {errors && errors.naziv && (
+                            <span className="text-danger">{errors.naziv.message}</span>
                         )}
                     </Col>
                     <Col md={6}>
@@ -48,7 +57,8 @@ const CreatePopisDialog = ({isOpen}) => {
                     </Col>
                 </Row>
                 <Row className="mb-3">
-                    <Col md={6} className="mb-1">
+                    <Col md={12} className="mb-1">
+                        <label>Aktivan</label>
                         <input type="checkbox" className="" placeholder="Aktivan" {...register("active", {
                             required: "Aktivan is required!"
                         })} />
@@ -58,6 +68,22 @@ const CreatePopisDialog = ({isOpen}) => {
                     </Col>
 
                 </Row>
+                <Row className="mb-3">
+                    {/*<h3>Rola</h3>*/}
+                    {/*<Dropdown options={options} onSelect={handleSelect}/>*/}
+                    <Col md={3} className="mb-1">
+                        <label>Rola</label>
+                        <input type="number" className="form-control" placeholder="Rola" {...register("rola", {
+                            maxLength: 1,
+                            minLength: 1,
+                            required: true,
+                        })}/>
+                        {errors && errors.rola && (
+                            <span className="text-danger">{errors.rola.message}</span>
+                        )}
+                    </Col>
+                </Row>
+
             </ModalBody>
             <ModalFooter>
                 <Button className="btn btn-success" type="button" onClick={() => {

@@ -3,7 +3,7 @@ import useListData from "@/hooks/useListData";
 import DataTable from "react-data-table-component";
 import {useEffect, useState} from "react";
 import {Button, Card, CardBody, CardHeader, Row, Spinner} from "reactstrap";
-import {CiEdit, CiTrash} from "react-icons/ci";
+import {CiCalculator1, CiEdit, CiTrash} from "react-icons/ci";
 import {useListActions} from "@/contexts/listActionContext";
 import listAction from "@/core/listAction";
 import {IoAddCircleOutline} from "react-icons/io5";
@@ -28,7 +28,7 @@ export const tableColumns = [
     },
     {
         name: 'Options',
-        selector: (row) => `${row.lastName}`,
+        selector: (row) => `${row.naziv}`,
         cell: (row) => {
             const {dispatch} = useListActions();
 
@@ -36,9 +36,17 @@ export const tableColumns = [
                 <>
                     <Button className="btn btn-primary me-3" variant="outline-light" onClick={() => {
                         dispatch({
+                            type: listAction.OPENSTAVKE,
+                            payload: row
+                        });
+                    }}>
+                        <CiCalculator1/>
+                    </Button>
+                    <Button className="btn btn-primary me-3" variant="outline-light" onClick={() => {
+                        dispatch({
                             type: listAction.UPDATE,
                             payload: row
-                        })
+                        });
                     }}>
                         <CiEdit/>
                     </Button>
@@ -46,7 +54,7 @@ export const tableColumns = [
                         dispatch({
                             type: listAction.DELETE,
                             payload: row
-                        })
+                        });
                     }}>
                         <CiTrash/>
                     </Button>
@@ -62,21 +70,23 @@ export default function PopisList() {
     const [pageNumber, setPageNumber] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const {state, dispatch} = useListActions();
+
+    const url = `popis/get-page-list?userID=${userID}&pageNumber=${pageNumber - 1}&pageSize=${pageSize}`;
     const {
         getData,
         loading,
         data
-    } = useListData(`popis/get-page-list?pageNumber=${pageNumber - 1}&pageSize=${pageSize}`);
+    } = useListData(url);
 
     useEffect(() => {
         if (userID){
-            getData(`popis/get-page-list?pageNumber=${pageNumber - 1}&pageSize=${pageSize}`);
+            getData(url);
         }
     }, [pageSize, pageNumber]);
 
     useEffect(() => {
         if (state.reload && userID) {
-            getData(`popis/get-page-list?pageNumber=${pageNumber - 1}&pageSize=${pageSize}`);
+            getData(url);
         }
     }, [state, userID]);
 
@@ -121,69 +131,3 @@ export default function PopisList() {
         </>
     );
 }
-// export default function PopisList() {
-//     const {data: session} = useSession();
-//     const userID = session?.decoded?.id;
-//     const [pageNumber, setPageNumber] = useState(1);
-//     const [pageSize, setPageSize] = useState(10);
-//     const {state, dispatch} = useListActions();
-//     const {
-//         getData,
-//         loading,
-//         data
-//     } = useListData(`popis/get-page-list?userID=${userID}&pageNumber=${pageNumber - 1}&pageSize=${pageSize}`);
-//
-//     useEffect(() => {
-//         if (userID){
-//             getData(`popis/get-page-list?userID=${userID}&pageNumber=${pageNumber - 1}&pageSize=${pageSize}`);
-//         }
-//     }, [pageSize, pageNumber]);
-//
-//     useEffect(() => {
-//         if (state.reload && userID) {
-//             getData(`popis/get-page-list?userID=${userID}&pageNumber=${pageNumber - 1}&pageSize=${pageSize}`);
-//         }
-//     }, [state, userID]);
-//
-//     const handlePageChange = async (page) => {
-//         setPageNumber(page);
-//     };
-//
-//     const handlePerRowsChange = async (newPerPage, page) => {
-//         setPageNumber(page);
-//         setPageSize(newPerPage);
-//     };
-//
-//     return (
-//         <>
-//             <Card>
-//                 <CardHeader className="d-flex justify-content-end">
-//                     <Button className="btn btn-success me-3" variant="outline-light" onClick={() => {
-//                         dispatch({
-//                             type: listAction.CREATE
-//                         })
-//                     }}>
-//                         Kreiraj Popis <IoAddCircleOutline/>
-//                     </Button>
-//                 </CardHeader>
-//                 <CardBody>
-//                     {data != null && <DataTable data={data.popis}
-//                                                 columns={tableColumns}
-//                                                 striped={true}
-//                                                 noHeader={true}
-//                                                 pagination
-//                                                 paginationServer
-//                                                 progressPending={loading}
-//                                                 paginationTotalRows={data.totalElements}
-//                                                 onChangePage={handlePageChange}
-//                                                 onChangeRowsPerPage={handlePerRowsChange}
-//                                                 progressComponent={<Spinner color="danger">Ocitavanje...</Spinner>}
-//                                                 highlightOnHover
-//                     />}
-//                 </CardBody>
-//             </Card>
-//
-//             <AddPopisDialogs/>
-//         </>
-//     );
-// }

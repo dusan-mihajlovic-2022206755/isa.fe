@@ -29,12 +29,11 @@ const UpdatePopisDialog = ({isOpen}) => {
         setValue("napomena", state.row.napomena);
         setValue("active", state.row.active);
         setValue("id", state.row.id);
-        setValue("id_user", state.row.userId);
     }, [state]);
 
     return (
         <Modal isOpen={isOpen} toggle={toggle}>
-            <ModalHeader toggle={toggle}>Modal title</ModalHeader>
+            <ModalHeader toggle={toggle}>Izmena popisa {state.row.naziv}</ModalHeader>
             <ModalBody>
                 <Row className="mb-3">
                     <Col md={6} className="mb-1">
